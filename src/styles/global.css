@@ -166,6 +166,7 @@
 
 html {
   scroll-behavior: smooth;
+  overscroll-behavior-y: none;
 }
 
 body {
@@ -179,12 +180,14 @@ body {
   display: flex;
   flex-direction: column;
   -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
   transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 main {
   flex: 1 0 auto;
   width: 100%;
+  padding-top: 68px;
 }
 
 h1,
