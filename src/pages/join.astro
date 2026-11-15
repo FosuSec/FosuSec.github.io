@@ -1,41 +1,84 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { site } from '../data/site';
+import { ctfTracks } from '../data/tracks';
 ---
 
-<BaseLayout title="加入我们" description={`加入${site.name}（${site.shortName}）的招新要求与报名方式。`}>
-  <section class="page-hero">
+<BaseLayout title="加入我们" description={`加入${site.name}（${site.shortName}）的招新方向、招新要求与报名方式。`}>
+  <!-- 招新横幅 -->
+  <section class="join-hero">
     <div class="container">
-      <h1>加入我们</h1>
-      <p>如果你对网络安全充满热情，欢迎加入 {site.name}，一起学习、一起比赛、一起成长。</p>
+      <p class="eyebrow">招新 · Recruitment</p>
+      <h1 class="join-title">加入我们</h1>
+      <p class="join-desc">
+        五个方向、一条成长路径——无论你从哪个赛道入门，都能在 FosuSec 找到属于自己的位置。
+      </p>
+      <div class="join-status">
+        <span class="join-status-dot" aria-hidden="true"></span>
+        <span>
+          {site.recruitmentOpen ? '招新状态：进行中 · 全年滚动报名' : '招新状态：暂未开启 · 敬请关注本站动态'}
+        </span>
+      </div>
     </div>
   </section>
 
+  <!-- 招新方向 -->
   <section class="section">
-    <div class="container grid-2">
-      <div class="card">
-        <h3>我们期待的你</h3>
-        <ul>
-          <li>对网络安全有浓厚兴趣，乐于钻研；</li>
-          <li>具备一定编程基础（C / Python / Web 等均可）；</li>
-          <li>有较强的自主学习能力与团队协作精神；</li>
-          <li>不限年级、不限专业。</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>你将收获</h3>
-        <ul>
-          <li>系统的学习路线与师兄师姐指导；</li>
-          <li>参与 CTF 与信息安全竞赛的机会；</li>
-          <li>实战项目与安全研究经验；</li>
-          <li>志同道合的技术伙伴。</li>
-        </ul>
+    <div class="container">
+      <p class="eyebrow">01 · Tracks</p>
+      <h2 class="section-title">招新方向</h2>
+      <p class="section-subtitle">五个方向，覆盖 CTF 竞赛的核心题型与实战技能。</p>
+      <div class="tracks">
+        {
+          ctfTracks.map((track, i) => (
+            <article class="track">
+              <div class="track-index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</div>
+              <div class="track-body">
+                <div class="track-head">
+                  <h3>{track.title}</h3>
+                  <span class="track-tag">{track.tag}</span>
+                </div>
+                <p>{track.description}</p>
+              </div>
+            </article>
+          ))
+        }
       </div>
     </div>
   </section>
 
+  <!-- 招新要求与收获 -->
   <section class="section section-soft">
     <div class="container">
+      <p class="eyebrow">02 · Fit</p>
+      <h2 class="section-title">招新要求</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>我们期待的你</h3>
+          <ul>
+            <li>对网络安全有浓厚兴趣，乐于钻研；</li>
+            <li>具备一定编程基础（C / Python / Web 等均可）；</li>
+            <li>有较强的自主学习能力与团队协作精神；</li>
+            <li>不限年级、不限专业。</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>你将收获</h3>
+          <ul>
+            <li>系统的学习路线与师兄师姐指导；</li>
+            <li>参与 CTF 与信息安全竞赛的机会；</li>
+            <li>实战项目与安全研究经验；</li>
+            <li>志同道合的技术伙伴。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 报名方式 -->
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">03 · Apply</p>
       <h2 class="section-title">报名方式</h2>
       <div class="prose">
         <p>
@@ -47,12 +90,130 @@ import { site } from '../data/site';
           报名时请附上个人简介、学习方向与相关经历（如有），便于我们更好地了解你。
         </p>
       </div>
-      <a href="/contact" class="btn btn-primary">前往联系方式</a>
+      <div class="apply-cta">
+        <a href="/contact" class="btn btn-primary">前往联系方式</a>
+      </div>
     </div>
   </section>
 </BaseLayout>
 
 <style>
+  /* ---------- 招新横幅（区别于首页 Hero） ---------- */
+  .join-hero {
+    background: linear-gradient(135deg, var(--primary-soft), var(--bg));
+    border-bottom: 1px solid var(--border);
+    padding: 4rem 0 3rem;
+  }
+
+  .join-title {
+    background: none;
+    -webkit-text-fill-color: var(--heading);
+    color: var(--heading);
+    transition: text-shadow 0.15s ease;
+  }
+
+  .join-title:hover {
+    text-shadow: 2px 0 var(--accent), -2px 0 var(--primary);
+  }
+
+  .join-desc {
+    color: var(--text-muted);
+    max-width: 680px;
+    margin: 0.75rem 0 0;
+  }
+
+  .join-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 1.5rem;
+  }
+
+  .join-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--primary);
+    flex-shrink: 0;
+    animation: join-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes join-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.35;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .join-status-dot {
+      animation: none;
+    }
+  }
+
+  /* ---------- 方向列表（行式清单，区别于首页卡片网格） ---------- */
+  .tracks {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .track {
+    display: grid;
+    grid-template-columns: 76px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+    padding: 1.75rem 0;
+    border-bottom: 1px solid var(--border);
+    transition: background-color 0.15s ease;
+  }
+
+  .track:first-of-type {
+    border-top: 1px solid var(--border);
+  }
+
+  .track-index {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    padding-top: 0.35rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .track-head {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.4rem;
+  }
+
+  .track-head h3 {
+    margin: 0;
+  }
+
+  .track-tag {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    color: var(--primary);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.08rem 0.6rem;
+  }
+
+  .track-body p {
+    color: var(--text-muted);
+    margin: 0;
+    max-width: 780px;
+  }
+
   .grid-2 {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -63,9 +224,20 @@ import { site } from '../data/site';
     margin-bottom: 0;
   }
 
+  .apply-cta {
+    max-width: 760px;
+    margin: 1.5rem auto 0;
+    text-align: right;
+  }
+
   @media (max-width: 760px) {
     .grid-2 {
       grid-template-columns: 1fr;
+    }
+
+    .track {
+      grid-template-columns: 1fr;
+      gap: 0.4rem;
     }
   }
 </style>
