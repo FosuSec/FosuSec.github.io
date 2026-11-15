@@ -1,0 +1,671 @@
+/* ============================================================
+   FosuSec 官网全局样式 —— 简洁学术风（浅色为主，支持深色模式）
+   ============================================================ */
+
+:root {
+  --bg: #ffffff;
+  --bg-soft: #f6f8fb;
+  --surface: #ffffff;
+  --text: #334155;
+  --text-muted: #64748b;
+  --heading: #0f172a;
+  --primary: #1d4ed8;
+  --primary-dark: #1e40af;
+  --primary-soft: #eef4ff;
+  --accent: #0891b2;
+  --border: #e5e9f0;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow: 0 6px 24px rgba(15, 23, 42, 0.08);
+  --max-width: 1120px;
+  --header-bg: rgba(255, 255, 255, 0.9);
+  --logo-bg: #ffffff;
+  --code-color: #b91c1c;
+  --code-block-bg: #0f172a;
+  --code-block-text: #e2e8f0;
+  --gold-bg: #fef3c7;
+  --gold-text: #b45309;
+  --font-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+  --font-mono: 'SFMono-Regular', 'JetBrains Mono', Consolas, 'Liberation Mono',
+    Menlo, monospace;
+}
+
+/* ---------- 深色模式（黑客风 · 黑灰） ---------- */
+:root[data-theme='dark'] {
+  --bg: #0a0a0a;
+  --bg-soft: #131313;
+  --surface: #131313;
+  --text: #d4d4d4;
+  --text-muted: #737373;
+  --heading: #fafafa;
+  --primary: #e5e5e5;
+  --primary-dark: #ffffff;
+  --primary-soft: rgba(255, 255, 255, 0.08);
+  --accent: #a3a3a3;
+  --border: #262626;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.6);
+  --shadow: 0 0 18px rgba(255, 255, 255, 0.06);
+  --header-bg: rgba(10, 10, 10, 0.9);
+  --logo-bg: #2e2e2e;
+  --code-color: #e5e5e5;
+  --code-block-bg: #050505;
+  --code-block-text: #d4d4d4;
+  --gold-bg: #1c1c1c;
+  --gold-text: #e5e5e5;
+}
+
+/* 黑客风细节：标题微光、主按钮黑字灰底 */
+:root[data-theme='dark'] h1,
+:root[data-theme='dark'] h2,
+:root[data-theme='dark'] h3,
+:root[data-theme='dark'] h4 {
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.12);
+}
+
+:root[data-theme='dark'] .btn-primary {
+  color: #0a0a0a;
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.18);
+}
+
+:root[data-theme='dark'] .btn-primary:hover {
+  color: #0a0a0a;
+}
+
+:root[data-theme='dark'] a:hover {
+  color: var(--primary-dark);
+}
+
+:root[data-theme='dark'] .badge {
+  color: var(--primary);
+}
+
+/* ---------- 黑客风增强：网格背景 + CRT 扫描线 ---------- */
+:root[data-theme='dark'] body {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 42px 42px;
+  background-attachment: fixed;
+}
+
+:root[data-theme='dark'] body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.025) 0px,
+    rgba(255, 255, 255, 0.025) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+/* 卡片悬浮霓虹描边 */
+:root[data-theme='dark'] .card:hover {
+  border-color: #3a3a3a;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.08);
+}
+
+/* ---------- 浅色模式增强：清爽科技感 ---------- */
+:root:not([data-theme='dark']) body {
+  background-image: radial-gradient(rgba(29, 78, 216, 0.07) 1px, transparent 1.4px);
+  background-size: 26px 26px;
+  background-attachment: fixed;
+}
+
+:root:not([data-theme='dark']) body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(50% 40% at 12% 0%, rgba(29, 78, 216, 0.1), transparent 70%),
+    radial-gradient(45% 36% at 88% 8%, rgba(8, 145, 178, 0.1), transparent 70%);
+}
+
+/* 渐变标题（蓝→青） */
+:root:not([data-theme='dark']) h1,
+:root:not([data-theme='dark']) h2 {
+  background: linear-gradient(120deg, #1d4ed8, #0891b2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* 渐变主按钮 + 光晕 */
+:root:not([data-theme='dark']) .btn-primary {
+  background: linear-gradient(120deg, #1d4ed8, #0891b2);
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(29, 78, 216, 0.22);
+}
+
+:root:not([data-theme='dark']) .btn-primary:hover {
+  background: linear-gradient(120deg, #1e40af, #0e7490);
+  color: #fff;
+  box-shadow: 0 8px 26px rgba(29, 78, 216, 0.3);
+}
+
+/* 卡片悬浮描边 + 柔和光晕 */
+:root:not([data-theme='dark']) .card:hover {
+  border-color: rgba(29, 78, 216, 0.22);
+  box-shadow: 0 12px 30px rgba(29, 78, 216, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.75;
+  letter-spacing: 1.2px;
+  font-size: 16px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+main {
+  flex: 1 0 auto;
+  width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--heading);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+h1 {
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  text-wrap: balance;
+}
+
+h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  text-wrap: balance;
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
+p {
+  margin: 0 0 1rem;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+a:hover {
+  color: var(--primary-dark);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+ul,
+ol {
+  padding-left: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+code {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  background: var(--bg-soft);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.9em;
+  color: var(--code-color);
+}
+
+pre {
+  background: var(--code-block-bg);
+  color: var(--code-block-text);
+  padding: 1rem 1.2rem;
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+/* ---------- 布局容器 ---------- */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ---------- 按钮 ---------- */
+.btn {
+  display: inline-block;
+  padding: 0.65rem 1.5rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.15s ease;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+  color: #fff;
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.btn-outline:hover {
+  background: var(--primary-soft);
+  color: var(--primary-dark);
+}
+
+/* ---------- 卡片 ---------- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+}
+
+/* ---------- 研究方向卡片文字排版 ---------- */
+.grid-4 .card {
+  display: flex;
+  flex-direction: column;
+}
+
+.grid-4 .card h3 {
+  font-size: 1.15rem;
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+}
+
+.grid-4 .card p {
+  color: var(--text-muted);
+  font-size: 0.94rem;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ---------- 徽标 ---------- */
+.badge {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.badge-gold {
+  background: var(--gold-bg);
+  color: var(--gold-text);
+}
+
+/* ---------- 设计增强：眉题 / 链接动效 / 可访问性 ---------- */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.more {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0 1px;
+  transition: background-size 0.25s ease;
+}
+
+.more:hover {
+  background-size: 100% 1px;
+}
+
+.arrow {
+  transition: transform 0.2s ease;
+}
+
+.card:hover .arrow {
+  transform: translateX(4px);
+}
+
+time {
+  font-variant-numeric: tabular-nums;
+}
+
+::selection {
+  background: var(--primary);
+  color: var(--bg);
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.prose a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--border);
+}
+
+.prose a:hover {
+  text-decoration-color: var(--primary);
+}
+
+/* ---------- 区块通用 ---------- */
+.section {
+  padding: 4.5rem 0;
+}
+
+.section-soft {
+  background: var(--bg-soft);
+}
+
+.section-title {
+  margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+  color: var(--text-muted);
+  margin-bottom: 2.5rem;
+  max-width: 640px;
+}
+
+/* ---------- 页面头部（内页横幅） ---------- */
+.page-hero {
+  background: linear-gradient(135deg, var(--primary-soft), var(--bg));
+  border-bottom: 1px solid var(--border);
+  padding: 4rem 0 3rem;
+}
+
+.page-hero h1 {
+  margin-bottom: 0.5rem;
+}
+
+.page-hero p {
+  color: var(--text-muted);
+  max-width: 680px;
+  margin-bottom: 0;
+}
+
+/* ---------- Markdown 正文排版 ---------- */
+.prose {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.prose h2 {
+  margin: 2rem 0 0.8rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.prose h3 {
+  margin: 1.5rem 0 0.6rem;
+}
+
+.prose p {
+  margin-bottom: 1rem;
+}
+
+.prose img {
+  border-radius: var(--radius);
+  margin: 1rem 0;
+}
+
+.prose blockquote {
+  border-left: 4px solid var(--primary);
+  background: var(--primary-soft);
+  padding: 0.6rem 1rem;
+  margin: 1rem 0;
+  color: var(--text);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.95rem;
+}
+
+.prose th,
+.prose td {
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+.prose th {
+  background: var(--bg-soft);
+  color: var(--heading);
+}
+
+/* ---------- 主题切换按钮图标 ---------- */
+.icon-sun {
+  display: none;
+}
+
+.icon-moon {
+  display: block;
+}
+
+:root[data-theme='dark'] .icon-sun {
+  display: block;
+}
+
+:root[data-theme='dark'] .icon-moon {
+  display: none;
+}
+
+/* ---------- 终端风状态行 ---------- */
+.hero-status {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-top: 1.75rem;
+  display: flex;
+  align-items: center;
+}
+
+.hero-status .prompt {
+  color: var(--primary);
+  margin-right: 0.55rem;
+  font-weight: 600;
+}
+
+.typed {
+  display: inline-block;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.caret {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 8px;
+  height: 1.1em;
+  margin-left: 2px;
+  background: var(--primary);
+  animation: blink 1s step-end infinite;
+}
+
+@media (max-width: 640px) {
+  .hero-status {
+    font-size: 0.78rem;
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ---------- 关键词跑马灯 ---------- */
+.marquee {
+  overflow: hidden;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-soft);
+  padding: 0.8rem 0;
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 40s linear infinite;
+}
+
+.marquee-track span {
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding-right: 5.25rem;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ---------- 卡片准星角标 ---------- */
+.card {
+  position: relative;
+}
+
+.card::before,
+.card::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.card::before {
+  top: 6px;
+  left: 6px;
+  border-top: 1px solid var(--primary);
+  border-left: 1px solid var(--primary);
+}
+
+.card::after {
+  bottom: 6px;
+  right: 6px;
+  border-bottom: 1px solid var(--primary);
+  border-right: 1px solid var(--primary);
+}
+
+.card:hover::before,
+.card:hover::after {
+  opacity: 0.55;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track,
+  .caret {
+    animation: none;
+  }
+}
+
+/* ---------- 滚动渐入 ---------- */
+.js .section {
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.js .section:not(.is-visible) {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .section {
+    transition: none;
+  }
+
+  .js .section:not(.is-visible) {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- 顶部滚动进度条 ---------- */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background: var(--primary);
+  z-index: 100;
+  pointer-events: none;
+}
+
+/* ---------- 跑马灯悬停暂停 ---------- */
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}

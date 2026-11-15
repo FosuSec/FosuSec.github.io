@@ -1,0 +1,118 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../data/site';
+import { researchDirections } from '../../data/research';
+import { members } from '../../data/members';
+---
+
+<BaseLayout title="About" description={`Learn about ${site.nameEn} (${site.shortName}), its research directions and team members.`}>
+  <section class="page-hero">
+    <div class="container">
+      <h1>About Us</h1>
+      <p>Learn about {site.nameEn} ({site.shortName}), its mission, research directions and team.</p>
+    </div>
+  </section>
+
+  <!-- 实验室简介 -->
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">01 · About</p>
+      <h2 class="section-title">Overview</h2>
+      <div class="prose">
+        <p>
+          {site.fullName} is an academic and competitive team in cyberspace security. We bring together
+          students passionate about cybersecurity, learning and researching in web security, binary and
+          reverse engineering, cryptography and secure development, while sharpening practical skills
+          through CTF and information security competitions.
+        </p>
+        <p>
+          The lab is committed to "learning through competition and research through learning", providing
+          members with a platform for collaboration, competition opportunities and hands-on projects, while
+          sharing technical writeups with the security community.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 研究方向 -->
+  <section class="section section-soft">
+    <div class="container">
+      <p class="eyebrow">02 · Research</p>
+      <h2 class="section-title">Research Directions</h2>
+      <p class="section-subtitle">We focus on the following core areas.</p>
+      <div class="grid-2">
+        {
+          researchDirections.map((dir) => (
+            <div class="card">
+              <h3>{dir.titleEn}</h3>
+              <p>{dir.descriptionEn}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- 团队成员 -->
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">03 · Members</p>
+      <h2 class="section-title">Members</h2>
+      <p class="section-subtitle">Sample member list; update in the source as needed.</p>
+      <div class="grid-2">
+        {
+          members.map((m) => (
+            <div class="card member-card">
+              <div class="avatar">{m.name.slice(0, 1)}</div>
+              <div>
+                <h3>{m.name}</h3>
+                <span class="badge">{m.roleEn}</span>
+                <p>{m.bioEn}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+
+  .member-card {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .member-card p {
+    margin: 0.5rem 0 0;
+    color: var(--text-muted);
+    font-size: 0.92rem;
+  }
+
+  .avatar {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--primary-soft);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+  }
+
+  @media (max-width: 760px) {
+    .grid-2 {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

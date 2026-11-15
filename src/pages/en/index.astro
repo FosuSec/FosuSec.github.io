@@ -1,0 +1,338 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../data/site';
+import { researchDirections } from '../../data/research';
+import { getCollection } from 'astro:content';
+
+const latestNews = (await getCollection('news'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+const latestWriteups = (await getCollection('writeups'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+function formatDate(d: Date) {
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+---
+
+<BaseLayout>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-watermark" aria-hidden="true">FOSUSEC</div>
+    <div class="container hero-inner">
+      <div class="hero-text">
+        <span class="badge">{site.shortName} · Cybersecurity</span>
+        <h1>{site.nameEn}</h1>
+        <p class="hero-desc">{site.descriptionEn}</p>
+        <div class="hero-actions">
+          <a href="/en/about" class="btn btn-primary">About Us</a>
+          <a href="/en/join" class="btn btn-outline">Join Us</a>
+        </div>
+        <div class="hero-status">
+          <span class="prompt">$</span>
+          <span class="typed" data-text="fosusec --focus web,pwn,crypto,reverse"></span>
+          <span class="caret" aria-hidden="true"></span>
+        </div>
+      </div>
+      <div class="hero-logo">
+        <img src="/logo.png" alt={`${site.nameEn} Logo`} width="180" height="180" />
+      </div>
+    </div>
+  </section>
+
+  <!-- 关键词跑马灯 -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      {Array.from({ length: 8 }, () => (
+        <span>Web · Pwn · Reverse · Crypto · Forensics · CTF · Pentest · Audit · Defense</span>
+      ))}
+    </div>
+  </div>
+
+  <!-- 研究方向亮点 -->
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">01 · Research</p>
+      <h2 class="section-title">Research Directions</h2>
+      <p class="section-subtitle">We learn, research and compete across core cybersecurity areas.</p>
+      <div class="grid-4">
+        {
+          researchDirections.map((dir) => (
+            <div class="card">
+              <h3>{dir.titleEn}</h3>
+              <p>{dir.descriptionEn}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- 最新动态 -->
+  <section class="section section-soft">
+    <div class="container">
+      <p class="eyebrow">02 · News</p>
+      <div class="section-head">
+        <h2 class="section-title">Latest News</h2>
+        <a href="/en/news" class="more">View all →</a>
+      </div>
+      <div class="grid-3">
+        {
+          latestNews.map((post) => (
+            <a href={`/en/news/${post.id}`} class="card post-card">
+              <div class="post-meta">
+                <span class="badge">{post.data.category}</span>
+                <time>{formatDate(post.data.date)}</time>
+              </div>
+              <h3>{post.data.titleEn ?? post.data.title}</h3>
+              <p>{post.data.descriptionEn ?? post.data.description}</p>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- 最新 Writeups -->
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">03 · Writeups</p>
+      <div class="section-head">
+        <h2 class="section-title">Latest Writeups</h2>
+        <a href="/en/writeups" class="more">View all →</a>
+      </div>
+      <div class="grid-3">
+        {
+          latestWriteups.map((post) => (
+            <a href={`/en/writeups/${post.id}`} class="card post-card">
+              <div class="post-meta">
+                <span class="badge">{post.data.category}</span>
+                <time>{formatDate(post.data.date)}</time>
+              </div>
+              <h3>{post.data.titleEn ?? post.data.title}</h3>
+              <p>{post.data.descriptionEn ?? post.data.description}</p>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- 招新 CTA -->
+  <section class="section section-soft">
+    <div class="container cta">
+      <h2>Join FosuSec</h2>
+      <p>If you are passionate about cybersecurity, join us to learn, compete and grow together.</p>
+      <a href="/en/join" class="btn btn-primary">Recruitment Details</a>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      var nodes = document.querySelectorAll('.typed');
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      nodes.forEach(function (el) {
+        var text = el.getAttribute('data-text') || '';
+        if (reduce || !text) {
+          el.textContent = text;
+          return;
+        }
+        var i = 0;
+        var timer = setInterval(function () {
+          i += 1;
+          el.textContent = text.slice(0, i);
+          if (i >= text.length) clearInterval(timer);
+        }, 70);
+      });
+    })();
+  </script>
+</BaseLayout>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--primary-soft), var(--bg));
+    border-bottom: 1px solid var(--border);
+    padding: 4.5rem 0;
+  }
+
+  .hero-watermark {
+    position: absolute;
+    right: -2%;
+    bottom: -16%;
+    font-family: var(--font-mono);
+    font-size: clamp(4rem, 15vw, 11rem);
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    white-space: nowrap;
+    color: var(--primary);
+    opacity: 0.08;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      135deg,
+      transparent calc(50% - 1px),
+      var(--primary) 50%,
+      transparent calc(50% + 1px)
+    );
+    opacity: 0.14;
+    animation: hero-scan 7s linear infinite;
+    pointer-events: none;
+  }
+
+  @keyframes hero-scan {
+    from {
+      transform: translate(-25%, -25%);
+    }
+    to {
+      transform: translate(25%, 25%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero::after {
+      animation: none;
+      opacity: 0;
+    }
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .hero-text {
+    max-width: 640px;
+  }
+
+  .hero-text .badge {
+    margin-bottom: 1rem;
+  }
+
+  .hero-text h1 {
+    margin-bottom: 0.75rem;
+  }
+
+  .hero-desc {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    margin-bottom: 1.75rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-logo img {
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    object-fit: contain;
+    background: var(--logo-bg);
+    padding: 16px;
+  }
+
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+
+  .more {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .post-card {
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .post-card:hover {
+    color: var(--text);
+  }
+
+  .post-card h3 {
+    font-size: 1.1rem;
+  }
+
+  .post-card p {
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    margin: 0;
+  }
+
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .post-meta time {
+    color: var(--text-muted);
+    font-size: 0.82rem;
+  }
+
+  .cta {
+    text-align: center;
+  }
+
+  .cta p {
+    color: var(--text-muted);
+    max-width: 520px;
+    margin: 0 auto 1.5rem;
+  }
+
+  @media (max-width: 900px) {
+    .hero-inner {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .hero-logo {
+      order: -1;
+    }
+
+    .hero-actions {
+      justify-content: center;
+    }
+
+    .grid-4,
+    .grid-3 {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

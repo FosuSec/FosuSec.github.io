@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../data/site';
+---
+
+<BaseLayout title="加入我们" description={`加入${site.name}（${site.shortName}）的招新要求与报名方式。`}>
+  <section class="page-hero">
+    <div class="container">
+      <h1>加入我们</h1>
+      <p>如果你对网络安全充满热情，欢迎加入 {site.name}，一起学习、一起比赛、一起成长。</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container grid-2">
+      <div class="card">
+        <h3>我们期待的你</h3>
+        <ul>
+          <li>对网络安全有浓厚兴趣，乐于钻研；</li>
+          <li>具备一定编程基础（C / Python / Web 等均可）；</li>
+          <li>有较强的自主学习能力与团队协作精神；</li>
+          <li>不限年级、不限专业。</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>你将收获</h3>
+        <ul>
+          <li>系统的学习路线与师兄师姐指导；</li>
+          <li>参与 CTF 与信息安全竞赛的机会；</li>
+          <li>实战项目与安全研究经验；</li>
+          <li>志同道合的技术伙伴。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-soft">
+    <div class="container">
+      <h2 class="section-title">报名方式</h2>
+      <div class="prose">
+        <p>
+          {site.recruitmentOpen
+            ? '招新现已开启，请通过「联系方式」页面的邮箱或 GitHub 与我们联系，备注「加入实验室」，我们会尽快回复。'
+            : '本年度招新暂未开启，请关注本站动态获取最新通知。'}
+        </p>
+        <p>
+          报名时请附上个人简介、学习方向与相关经历（如有），便于我们更好地了解你。
+        </p>
+      </div>
+      <a href="/contact" class="btn btn-primary">前往联系方式</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+
+  .card ul {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 760px) {
+    .grid-2 {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

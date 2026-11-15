@@ -1,0 +1,106 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('writeups')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+
+function formatDate(d: Date) {
+  return d.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+---
+
+<BaseLayout title="CTF Writeups · 技术博客" description="FosuSec 的 CTF Writeups 与技术博客。">
+  <section class="page-hero">
+    <div class="container">
+      <h1>CTF Writeups · 技术博客</h1>
+      <p>沉淀竞赛复盘与技术研究，分享解题思路与安全知识。</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container list">
+      {
+        posts.length === 0 ? (
+          <p class="empty">暂无内容，敬请期待。</p>
+        ) : (
+          posts.map((post) => (
+            <a href={`/writeups/${post.id}`} class="card list-item">
+              <div class="list-info">
+                <div class="list-meta">
+                  <span class="badge">{post.data.category}</span>
+                  <time>{formatDate(post.data.date)}</time>
+                  {
+                    post.data.tags.map((t) => <span class="tag">#{t}</span>)
+                  }
+                </div>
+                <h3>{post.data.title}</h3>
+                <p>{post.data.description}</p>
+              </div>
+              <span class="arrow">→</span>
+            </a>
+          ))
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    color: var(--text);
+  }
+
+  .list-item:hover {
+    color: var(--text);
+  }
+
+  .list-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.4rem;
+  }
+
+  .list-meta time {
+    color: var(--text-muted);
+    font-size: 0.82rem;
+  }
+
+  .tag {
+    color: var(--text-muted);
+    font-size: 0.82rem;
+  }
+
+  .list-info h3 {
+    margin-bottom: 0.3rem;
+  }
+
+  .list-info p {
+    color: var(--text-muted);
+    margin: 0;
+    font-size: 0.94rem;
+  }
+
+  .arrow {
+    color: var(--primary);
+    font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+
+  .empty {
+    color: var(--text-muted);
+  }
+</style>

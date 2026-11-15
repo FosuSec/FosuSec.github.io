@@ -1,0 +1,116 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../data/site';
+import { researchDirections } from '../data/research';
+import { members } from '../data/members';
+---
+
+<BaseLayout title="关于我们" description={`了解${site.name}（${site.shortName}）的简介、研究方向与团队成员。`}>
+  <section class="page-hero">
+    <div class="container">
+      <h1>关于我们</h1>
+      <p>了解 {site.name}（{site.shortName}）的使命、研究方向与团队构成。</p>
+    </div>
+  </section>
+
+  <!-- 实验室简介 -->
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">01 · About</p>
+      <h2 class="section-title">实验室简介</h2>
+      <div class="prose">
+        <p>
+          {site.fullName} 是一支面向网络空间安全领域的学术与竞赛团队。我们聚集了对网络安全
+          充满热情的同学，在 Web 安全、二进制与逆向、密码学、安全开发等方向开展学习与研究，
+          并通过参加各类 CTF 竞赛、信息安全竞赛不断锤炼实战能力。
+        </p>
+        <p>
+          实验室致力于「以赛促学、以学促研」，为成员提供学习交流平台、竞赛机会与项目实践，
+          同时积极沉淀技术博客与 Writeups，回馈安全社区。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 研究方向 -->
+  <section class="section section-soft">
+    <div class="container">
+      <p class="eyebrow">02 · Research</p>
+      <h2 class="section-title">研究方向</h2>
+      <p class="section-subtitle">我们聚焦以下几个核心方向。</p>
+      <div class="grid-2">
+        {
+          researchDirections.map((dir) => (
+            <div class="card">
+              <h3>{dir.title}</h3>
+              <p>{dir.description}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- 团队成员 -->
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">03 · Members</p>
+      <h2 class="section-title">团队成员</h2>
+      <p class="section-subtitle">以下为示例成员名单，可在源码中按需更新。</p>
+      <div class="grid-2">
+        {
+          members.map((m) => (
+            <div class="card member-card">
+              <div class="avatar">{m.name.slice(0, 1)}</div>
+              <div>
+                <h3>{m.name}</h3>
+                <span class="badge">{m.role}</span>
+                <p>{m.bio}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+
+  .member-card {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .member-card p {
+    margin: 0.5rem 0 0;
+    color: var(--text-muted);
+    font-size: 0.92rem;
+  }
+
+  .avatar {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--primary-soft);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+  }
+
+  @media (max-width: 760px) {
+    .grid-2 {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

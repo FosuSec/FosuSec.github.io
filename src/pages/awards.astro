@@ -1,0 +1,99 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const awards = (await getCollection('awards')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+
+function formatDate(d: Date) {
+  return d.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long' });
+}
+---
+
+<BaseLayout title="获奖 · 荣誉" description="FosuSec 在各类信息安全竞赛中取得的获奖与荣誉。">
+  <section class="page-hero">
+    <div class="container">
+      <h1>获奖 · 荣誉</h1>
+      <p>记录实验室在各类信息安全竞赛中的成绩与荣誉。</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      {
+        awards.length === 0 ? (
+          <p class="empty">暂无内容，敬请期待。</p>
+        ) : (
+          <div class="timeline">
+            {
+              awards.map((a) => (
+                <div class="card award-item">
+                  <div class="award-year">{a.data.date.getFullYear()}</div>
+                  <div class="award-body">
+                    <div class="award-head">
+                      <h3>{a.data.title}</h3>
+                      <span class="badge badge-gold">{a.data.award}</span>
+                    </div>
+                    <p>
+                      {a.data.competition}
+                      {a.data.team ? ` · ${a.data.team}` : ''}
+                    </p>
+                    <time>{formatDate(a.data.date)}</time>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .award-item {
+    display: flex;
+    gap: 1.25rem;
+  }
+
+  .award-year {
+    flex-shrink: 0;
+    font-weight: 700;
+    color: var(--primary);
+    font-size: 1.3rem;
+    min-width: 60px;
+  }
+
+  .award-head {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.3rem;
+  }
+
+  .award-head h3 {
+    margin: 0;
+  }
+
+  .award-body p {
+    margin: 0 0 0.3rem;
+    color: var(--text-muted);
+  }
+
+  .award-body time {
+    color: var(--text-muted);
+    font-size: 0.82rem;
+  }
+
+  .empty {
+    color: var(--text-muted);
+  }
+</style>

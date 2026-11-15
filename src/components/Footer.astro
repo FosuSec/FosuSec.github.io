@@ -1,0 +1,121 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { site } from '../data/site';
+import { useTranslations, type Locale } from '../i18n/utils';
+
+const locale = (Astro.currentLocale ?? 'zh') as Locale;
+const t = useTranslations(locale);
+---
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <img src="/logo.png" alt={`${t('site.name')} Logo`} width="40" height="40" />
+        <div>
+          <div class="footer-name">{t('site.name')}</div>
+          <div class="footer-en">{t('site.shortName')}</div>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <a href={site.github} target="_blank" rel="noopener noreferrer">{t('footer.github')}</a>
+        <a href={`mailto:${site.email}`}>{t('footer.email')}</a>
+        <a href={getRelativeLocaleUrl(locale, '/about')}>{t('footer.about')}</a>
+        <a href={getRelativeLocaleUrl(locale, '/contact')}>{t('footer.contact')}</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">
+        &copy; {site.startYear}&ndash;{new Date().getFullYear()} {t('site.shortName')}
+      </span>
+      <span class="footer-note">{t('site.name')}</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--border);
+    background: var(--bg-soft);
+    padding: 2.75rem 0 1.5rem;
+  }
+
+  .footer-main {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .footer-brand img {
+    border-radius: 10px;
+  }
+
+  .footer-name {
+    font-weight: 700;
+    color: var(--heading);
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+
+  .footer-en {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+  }
+
+  .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .footer-links a {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    transition: color 0.15s ease;
+  }
+
+  .footer-links a:hover {
+    color: var(--primary);
+  }
+
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-top: 1.25rem;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+  }
+
+  .footer-copy {
+    margin: 0;
+  }
+
+  @media (max-width: 640px) {
+    .footer-main {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .footer-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

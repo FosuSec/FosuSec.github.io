@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../data/site';
+---
+
+<BaseLayout title="Join Us" description={`Recruitment requirements and how to apply for ${site.nameEn} (${site.shortName}).`}>
+  <section class="page-hero">
+    <div class="container">
+      <h1>Join Us</h1>
+      <p>If you are passionate about cybersecurity, welcome to {site.nameEn} — learn, compete and grow together.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container grid-2">
+      <div class="card">
+        <h3>Who We're Looking For</h3>
+        <ul>
+          <li>Strong interest in cybersecurity and a willingness to dive deep;</li>
+          <li>Basic programming skills (C / Python / Web, etc.);</li>
+          <li>Self-driven learning and teamwork spirit;</li>
+          <li>Open to all grades and majors.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>What You'll Gain</h3>
+        <ul>
+          <li>A structured learning path with mentorship from senior members;</li>
+          <li>Opportunities to participate in CTF and security competitions;</li>
+          <li>Hands-on projects and security research experience;</li>
+          <li>Like-minded technical partners.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-soft">
+    <div class="container">
+      <h2 class="section-title">How to Apply</h2>
+      <div class="prose">
+        <p>
+          {site.recruitmentOpen
+            ? 'Recruitment is now open. Contact us via email or GitHub on the contact page with the subject "Join FosuSec", and we will reply soon.'
+            : 'Recruitment is currently closed. Please follow our news for the latest announcements.'}
+        </p>
+        <p>
+          Please include your profile, learning direction and relevant experience (if any) when applying.
+        </p>
+      </div>
+      <a href="/en/contact" class="btn btn-primary">Go to Contact</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+
+  .card ul {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 760px) {
+    .grid-2 {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

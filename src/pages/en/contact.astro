@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../data/site';
+---
+
+<BaseLayout title="Contact" description={`Ways to contact ${site.nameEn} (${site.shortName}).`}>
+  <section class="page-hero">
+    <div class="container">
+      <h1>Contact</h1>
+      <p>Feel free to reach out for communication, collaboration or partnership.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container grid-3">
+      <div class="card">
+        <h3>GitHub</h3>
+        <p>Follow our organization for open-source projects and writeups.</p>
+        <a href={site.github} target="_blank" rel="noopener noreferrer">Visit GitHub →</a>
+      </div>
+      <div class="card">
+        <h3>Email</h3>
+        <p>For inquiries, collaboration or recruitment, reach us by email.</p>
+        <a href={`mailto:${site.email}`}>{site.email}</a>
+      </div>
+      <div class="card">
+        <h3>Join Us</h3>
+        <p>Want to join the lab? Check recruitment details.</p>
+        <a href="/en/join">Go to Recruitment →</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+
+  .card p {
+    color: var(--text-muted);
+    font-size: 0.94rem;
+  }
+
+  @media (max-width: 760px) {
+    .grid-3 {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
