@@ -22,8 +22,9 @@
   --header-bg: rgba(255, 255, 255, 0.9);
   --logo-bg: #ffffff;
   --code-color: #b91c1c;
-  --code-block-bg: #0f172a;
-  --code-block-text: #e2e8f0;
+  --code-block-bg: #ffffff;
+  --code-block-text: #24292e;
+  --scrollbar-thumb: rgba(15, 23, 42, 0.22);
   --gold-bg: #fef3c7;
   --gold-text: #b45309;
   --font-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, 'PingFang SC',
@@ -50,8 +51,9 @@
   --header-bg: rgba(10, 10, 10, 0.9);
   --logo-bg: #2e2e2e;
   --code-color: #e5e5e5;
-  --code-block-bg: #050505;
-  --code-block-text: #d4d4d4;
+  --code-block-bg: #24292e;
+  --code-block-text: #e1e4e8;
+  --scrollbar-thumb: rgba(255, 255, 255, 0.24);
   --gold-bg: #1c1c1c;
   --gold-text: #e5e5e5;
 }
@@ -262,6 +264,152 @@ pre code {
   background: transparent;
   color: inherit;
   padding: 0;
+}
+
+/* Shiki 双主题：跟随站点 data-theme（浅色为默认，深色用 data-theme='dark'） */
+.astro-code,
+.astro-code span {
+  color: var(--shiki-light);
+  background-color: var(--shiki-light-bg);
+}
+
+:root[data-theme='dark'] .astro-code,
+:root[data-theme='dark'] .astro-code span {
+  color: var(--shiki-dark);
+  background-color: var(--shiki-dark-bg);
+}
+
+/* ---------- 代码块（终端风：语言标签 + 复制按钮） ---------- */
+.code-block {
+  margin: 1.25rem 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--code-block-bg);
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.code-block:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow);
+}
+
+.code-block__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.45rem 0.9rem;
+  background: var(--bg-soft);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+
+.code-block__lang {
+  color: var(--text-muted);
+  letter-spacing: 0.03em;
+}
+
+.code-block__lang::before {
+  content: '$';
+  color: var(--primary);
+  margin-right: 0.5rem;
+}
+
+.code-block__copy {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1;
+  padding: 0.28rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.code-block__copy:hover {
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.code-block__copy:active {
+  transform: translateY(1px);
+}
+
+.code-block pre {
+  margin: 0;
+  border-radius: 0;
+  background-color: var(--code-block-bg);
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+
+.code-block pre::-webkit-scrollbar {
+  height: 8px;
+}
+
+.code-block pre::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.code-block pre::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 999px;
+}
+
+.code-block pre::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+.code-block pre:focus-visible {
+  outline-offset: -2px;
+}
+
+/* 长代码块：折叠 / 展开 */
+.code-block--collapsed pre {
+  max-height: 320px;
+  overflow-y: hidden;
+}
+
+.code-block__toggle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  border: none;
+  border-top: 1px solid var(--border);
+  padding: 0.55rem 1rem;
+  background: var(--bg-soft);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.code-block__toggle:hover {
+  color: var(--primary);
+}
+
+.code-block__toggle-meta {
+  opacity: 0.7;
+}
+
+.code-block--collapsed .code-block__toggle::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  height: 3rem;
+  background: linear-gradient(to bottom, transparent, var(--code-block-bg));
+  pointer-events: none;
 }
 
 /* ---------- 布局容器 ---------- */

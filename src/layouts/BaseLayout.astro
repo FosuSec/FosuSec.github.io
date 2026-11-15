@@ -69,7 +69,7 @@ const htmlLang = locale === 'en' ? 'en' : 'zh-CN';
               io.unobserve(entry.target);
             }
           });
-        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+        }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
         els.forEach(function (el) { io.observe(el); });
       })();
     </script>
@@ -92,6 +92,111 @@ const htmlLang = locale === 'en' ? 'en' : 'zh-CN';
           }
         }, { passive: true });
         update();
+      })();
+    </script>
+    <script is:inline>
+      // 代码块增强：终端风头栏（语言标签 + 复制）+ 长代码折叠
+      (function () {
+        var pres = document.querySelectorAll('pre.astro-code');
+        if (!pres.length) return;
+
+        var isZh = document.documentElement.lang === 'zh-CN';
+        var copyLabel = isZh ? '复制' : 'Copy';
+        var copiedLabel = isZh ? '已复制' : 'Copied';
+
+        function fallbackCopy(text, done) {
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          ta.setAttribute('readonly', '');
+          ta.style.position = 'fixed';
+          ta.style.top = '0';
+          ta.style.left = '0';
+          ta.style.opacity = '0';
+          ta.style.pointerEvents = 'none';
+          document.body.appendChild(ta);
+          ta.focus();
+          ta.select();
+          ta.setSelectionRange(0, ta.value.length);
+          try { document.execCommand('copy'); } catch (e) {}
+          document.body.removeChild(ta);
+          done();
+        }
+
+        pres.forEach(function (pre) {
+          var rawLang = pre.getAttribute('data-language') || 'text';
+          var label = rawLang === 'plaintext' ? 'text' : rawLang;
+          var codeEl = pre.querySelector('code');
+          var text = (codeEl ? codeEl.textContent : pre.textContent).replace(/\n$/, '');
+          var lineCount = text.split('\n').length;
+
+          var wrapper = document.createElement('div');
+          wrapper.className = 'code-block';
+
+          var header = document.createElement('div');
+          header.className = 'code-block__header';
+
+          var langEl = document.createElement('span');
+          langEl.className = 'code-block__lang';
+          langEl.textContent = label;
+
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'code-block__copy';
+          btn.textContent = copyLabel;
+
+          btn.addEventListener('click', function () {
+            function done() {
+              btn.textContent = copiedLabel;
+              setTimeout(function () { btn.textContent = copyLabel; }, 1500);
+            }
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text, done); });
+            } else {
+              fallbackCopy(text, done);
+            }
+          });
+
+          header.appendChild(langEl);
+          header.appendChild(btn);
+          wrapper.appendChild(header);
+
+          pre.parentNode.insertBefore(wrapper, pre);
+          wrapper.appendChild(pre);
+
+          if (lineCount > 20) {
+            wrapper.classList.add('code-block--collapsed');
+
+            var toggle = document.createElement('button');
+            toggle.type = 'button';
+            toggle.className = 'code-block__toggle';
+            toggle.setAttribute('aria-expanded', 'false');
+
+            var toggleLabel = document.createElement('span');
+            toggleLabel.className = 'code-block__toggle-label';
+            var toggleMeta = document.createElement('span');
+            toggleMeta.className = 'code-block__toggle-meta';
+
+            toggle.appendChild(toggleLabel);
+            toggle.appendChild(toggleMeta);
+
+            function renderToggle() {
+              var collapsed = wrapper.classList.contains('code-block--collapsed');
+              toggleLabel.textContent = collapsed
+                ? (isZh ? '展开全部' : 'Expand')
+                : (isZh ? '收起' : 'Collapse');
+              toggleMeta.textContent = collapsed ? lineCount + (isZh ? ' 行' : ' lines') : '';
+            }
+
+            toggle.addEventListener('click', function () {
+              var collapsed = wrapper.classList.toggle('code-block--collapsed');
+              toggle.setAttribute('aria-expanded', String(!collapsed));
+              renderToggle();
+            });
+
+            renderToggle();
+            wrapper.appendChild(toggle);
+          }
+        });
       })();
     </script>
   </body>

@@ -13,6 +13,8 @@
     "new:writeups": "node scripts/new-post.mjs writeups"
   },
   "dependencies": {
-    "astro": "^5.0.0"
+    "astro": "^5.0.0",
+    "rehype-mathjax": "^7.1.0",
+    "remark-math": "^6.0.0"
   }
 }
