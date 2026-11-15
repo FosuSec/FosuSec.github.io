@@ -31,6 +31,7 @@ npm run new:writeups -- "某 CTF 逆向题解" --category "CTF Writeup" --tags "
 | `--date` | 否 | 今天 | 日期，格式 `YYYY-MM-DD` |
 | `--author` | 否 | `FosuSec` | 作者（仅 `writeups`） |
 | `--tags` | 否 | 无 | 标签（仅 `writeups`），逗号分隔 |
+| `--pinned` / `-p` | 否 | `false` | 置顶（仅 `news`），作为公告置顶显示 |
 
 分类取值：
 
@@ -58,6 +59,9 @@ npm run new:news -- "实验室举行第一次技术分享会" --category "活动
 # 通知
 npm run new:news -- "实验室招新正式启动" --category "通知"
 
+# 置顶公告
+npm run new:news -- "实验室重要公告" --pinned
+
 # CTF Writeup
 npm run new:writeups -- "某 CTF 逆向题解" --tags "CTF,Reverse"
 
@@ -67,7 +71,7 @@ npm run new:writeups -- "Web 安全入门学习路线" --category "安全研究"
 
 ## 生成规则
 
-1. **frontmatter**：自动写入 `title`、`description`、`date`、`category`，以及按类型追加 `author`、`tags` 字段，与 `src/content.config.ts` 中的 schema 保持一致。
+1. **frontmatter**：自动写入 `title`、`description`、`date`、`category`，以及按类型追加 `pinned`、`author`、`tags` 字段，与 `src/content.config.ts` 中的 schema 保持一致。
 2. **abbrlink**：根据标题自动计算 CRC32（与 `src/utils/crc32.ts` 一致），作为文章 URL slug。
 3. **文件名**：
    - `news`：`日期-标题.md`（如 `2026-11-15-实验室内部培训.md`）

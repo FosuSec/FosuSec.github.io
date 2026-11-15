@@ -9,6 +9,7 @@ const news = defineCollection({
     description: z.string(),
     date: z.coerce.date(),
     category: z.enum(['新闻', '活动', '通知']).default('新闻'),
+    pinned: z.boolean().default(false),
     titleEn: z.string().optional(),
     descriptionEn: z.string().optional(),
     abbrlink: z.string().optional(),

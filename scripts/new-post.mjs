@@ -65,9 +65,11 @@ type: news | writeups
       --date        日期（可选，默认今天，格式 YYYY-MM-DD）
       --author      作者（仅 writeups，默认 FosuSec）
       --tags        标签（仅 writeups，逗号分隔）
+  -p, --pinned      置顶（仅 news，可选）
 
 示例：
   npm run new:news -- "实验室招新启动"
+  npm run new:news -- "实验室公告" --pinned
   npm run new:writeups -- "某 CTF 逆向题解" --category "CTF Writeup" --tags "CTF,Reverse"
 `;
 
@@ -132,6 +134,7 @@ function main() {
       date: { type: 'string' },
       author: { type: 'string' },
       tags: { type: 'string' },
+      pinned: { type: 'boolean', short: 'p' },
     },
     allowPositionals: true,
   });
@@ -174,6 +177,9 @@ function main() {
     `date: ${date}`,
     `category: ${yamlSingle(category)}`,
   ];
+  if (type === 'news' && values.pinned) {
+    frontmatter.push('pinned: true');
+  }
   if (track.hasAuthor) {
     frontmatter.push(`author: ${yamlSingle(values.author || 'FosuSec')}`);
   }
