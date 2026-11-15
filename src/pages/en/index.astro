@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { site } from '../../data/site';
 import { researchDirections } from '../../data/research';
 import { getCollection } from 'astro:content';
+import { postSlug } from '../../utils/abbrlink';
 
 const latestNews = (await getCollection('news'))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
@@ -81,7 +82,7 @@ function formatDate(d: Date) {
       <div class="grid-3">
         {
           latestNews.map((post) => (
-            <a href={`/en/news/${post.id}`} class="card post-card">
+            <a href={`/en/news/${postSlug(post)}`} class="card post-card">
               <div class="post-meta">
                 <span class="badge">{post.data.category}</span>
                 <time>{formatDate(post.data.date)}</time>
@@ -106,7 +107,7 @@ function formatDate(d: Date) {
       <div class="grid-3">
         {
           latestWriteups.map((post) => (
-            <a href={`/en/writeups/${post.id}`} class="card post-card">
+            <a href={`/en/writeups/${postSlug(post)}`} class="card post-card">
               <div class="post-meta">
                 <span class="badge">{post.data.category}</span>
                 <time>{formatDate(post.data.date)}</time>

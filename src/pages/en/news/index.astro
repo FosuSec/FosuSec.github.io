@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { postSlug } from '../../../utils/abbrlink';
 
 const posts = (await getCollection('news')).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
@@ -26,7 +27,7 @@ function formatDate(d: Date) {
           <p class="empty">No posts yet.</p>
         ) : (
           posts.map((post) => (
-            <a href={`/en/news/${post.id}`} class="card list-item">
+            <a href={`/en/news/${postSlug(post)}`} class="card list-item">
               <div class="list-info">
                 <div class="list-meta">
                   <span class="badge">{post.data.category}</span>

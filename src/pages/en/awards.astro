@@ -3,8 +3,22 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
 const awards = (await getCollection('awards')).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+  (a, b) => (b.data.date?.valueOf() ?? 0) - (a.data.date?.valueOf() ?? 0),
 );
+
+let lastYear: number | null = null;
+const groups = awards.map((entry, index) => {
+  const year = entry.data.date?.getFullYear() ?? null;
+  const isNewGroup = year !== null && year !== lastYear;
+  lastYear = year;
+  return {
+    entry,
+    year,
+    isNewGroup,
+    side: index % 2 === 0 ? 'left' : 'right',
+    isLatest: index === 0,
+  };
+});
 
 function formatDate(d: Date) {
   return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
@@ -27,21 +41,25 @@ function formatDate(d: Date) {
         ) : (
           <div class="timeline">
             {
-              awards.map((a) => (
-                <div class="card award-item">
-                  <div class="award-year">{a.data.date.getFullYear()}</div>
-                  <div class="award-body">
-                    <div class="award-head">
-                      <h3>{a.data.titleEn ?? a.data.title}</h3>
-                      <span class="badge badge-gold">{a.data.awardEn ?? a.data.award}</span>
+              groups.map(({ entry, year, isNewGroup, side, isLatest }) => (
+                <>
+                  {isNewGroup && year !== null && (
+                    <div class="timeline-year">
+                      <span>{year}</span>
                     </div>
-                    <p>
-                      {a.data.competitionEn ?? a.data.competition}
-                      {a.data.team ? ` · ${a.data.team}` : ''}
-                    </p>
-                    <time>{formatDate(a.data.date)}</time>
+                  )}
+                  <div class={`award-item award-item--${side}${isLatest ? ' award-item--latest' : ''}`}>
+                    <div class="award-year">{year ?? '—'}</div>
+                    <div class="award-body">
+                      <div class="award-head">
+                        <h3>{entry.data.titleEn ?? entry.data.title}</h3>
+                        <span class="badge badge-gold">{entry.data.awardEn ?? entry.data.award}</span>
+                      </div>
+                      {entry.data.description && <p>{entry.data.description}</p>}
+                      {entry.data.date && <time>{formatDate(entry.data.date)}</time>}
+                    </div>
                   </div>
-                </div>
+                </>
               ))
             }
           </div>
@@ -53,22 +71,139 @@ function formatDate(d: Date) {
 
 <style>
   .timeline {
+    position: relative;
+    padding: 0.5rem 0 0;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    transform: translateX(-50%);
+    background: linear-gradient(to bottom, var(--primary-soft), var(--border));
+  }
+
+  .timeline-year {
+    position: relative;
     display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    justify-content: center;
+    margin: 0.5rem 0 1.75rem;
+  }
+
+  .timeline-year span {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    padding: 0.35rem 1.5rem;
+    border: 1px solid var(--primary);
+    border-radius: 999px;
+    background: var(--primary);
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.12em;
+    color: var(--bg);
+    box-shadow: 0 0 0 4px var(--primary-soft);
+  }
+
+  :global(:root[data-theme='dark']) .timeline-year span {
+    box-shadow:
+      0 0 0 4px var(--primary-soft),
+      0 0 24px rgba(255, 255, 255, 0.35);
   }
 
   .award-item {
+    position: relative;
+    box-sizing: border-box;
     display: flex;
-    gap: 1.25rem;
+    gap: 1rem;
+    width: 50%;
+    padding-bottom: 2.5rem;
+  }
+
+  .award-item:last-child {
+    padding-bottom: 0;
+  }
+
+  .award-item--left {
+    padding-right: 44px;
+    flex-direction: row-reverse;
+    text-align: right;
+  }
+
+  .award-item--right {
+    left: 50%;
+    padding-left: 44px;
+    flex-direction: row;
+    text-align: left;
+  }
+
+  .award-item::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--primary);
+    box-shadow: 0 0 0 4px var(--primary-soft);
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .award-item--left::before {
+    right: -8px;
+  }
+
+  .award-item--right::before {
+    left: -8px;
+  }
+
+  .award-item:hover::before {
+    background: var(--primary);
+    transform: scale(1.15);
+  }
+
+  .award-item--latest::before {
+    animation: node-pulse 2.4s ease-out infinite;
+  }
+
+  @keyframes node-pulse {
+    0%,
+    100% {
+      box-shadow: 0 0 0 4px var(--primary-soft);
+    }
+
+    50% {
+      box-shadow: 0 0 0 8px var(--primary-soft);
+    }
   }
 
   .award-year {
     flex-shrink: 0;
+    width: 56px;
+    font-family: var(--font-mono);
     font-weight: 700;
+    font-size: 1rem;
     color: var(--primary);
-    font-size: 1.3rem;
-    min-width: 60px;
+    line-height: 1.6;
+    padding-top: 2px;
+  }
+
+  .award-item--left .award-year {
+    text-align: right;
+  }
+
+  .award-item--right .award-year {
+    text-align: left;
+  }
+
+  .award-body {
+    flex: 1;
+    min-width: 0;
   }
 
   .award-head {
@@ -79,6 +214,14 @@ function formatDate(d: Date) {
     margin-bottom: 0.3rem;
   }
 
+  .award-item--left .award-head {
+    justify-content: flex-end;
+  }
+
+  .award-item--right .award-head {
+    justify-content: flex-start;
+  }
+
   .award-head h3 {
     margin: 0;
   }
@@ -86,11 +229,72 @@ function formatDate(d: Date) {
   .award-body p {
     margin: 0 0 0.3rem;
     color: var(--text-muted);
+    font-size: 0.88rem;
   }
 
   .award-body time {
     color: var(--text-muted);
     font-size: 0.82rem;
+    font-family: var(--font-mono);
+  }
+
+  @media (max-width: 640px) {
+    .timeline::before {
+      left: 16px;
+      transform: none;
+    }
+
+    .timeline-year {
+      justify-content: flex-start;
+    }
+
+    .timeline-year span {
+      margin-left: 14px;
+    }
+
+    .award-item,
+    .award-item--left,
+    .award-item--right {
+      left: 0;
+      width: 100%;
+      flex-direction: row;
+      text-align: left;
+      padding: 0 0 2rem 40px;
+    }
+
+    .award-item--left::before,
+    .award-item--right::before {
+      left: 8px;
+      right: auto;
+    }
+
+    .award-item--left .award-year,
+    .award-item--right .award-year {
+      text-align: left;
+    }
+
+    .award-item--left .award-head,
+    .award-item--right .award-head {
+      justify-content: flex-start;
+    }
+
+    .award-item:last-child {
+      padding-bottom: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .award-item::before {
+      transition: none;
+    }
+
+    .award-item:hover::before {
+      transform: none;
+    }
+
+    .award-item--latest::before {
+      animation: none;
+    }
   }
 
   .empty {

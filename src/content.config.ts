@@ -1,5 +1,5 @@
 import { defineCollection, z } from 'astro:content';
-import { glob } from 'astro/loaders';
+import { file, glob } from 'astro/loaders';
 
 /** 动态 / 新闻 / 活动 */
 const news = defineCollection({
@@ -11,6 +11,7 @@ const news = defineCollection({
     category: z.enum(['新闻', '活动', '通知']).default('新闻'),
     titleEn: z.string().optional(),
     descriptionEn: z.string().optional(),
+    abbrlink: z.string().optional(),
   }),
 });
 
@@ -26,20 +27,20 @@ const writeups = defineCollection({
     tags: z.array(z.string()).default([]),
     titleEn: z.string().optional(),
     descriptionEn: z.string().optional(),
+    abbrlink: z.string().optional(),
   }),
 });
 
 /** 获奖 / 荣誉 */
 const awards = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/awards' }),
+  loader: file('src/content/awards/awards.yml'),
   schema: z.object({
     title: z.string(),
-    competition: z.string(),
     award: z.string(),
-    date: z.coerce.date(),
+    date: z.coerce.date().optional(),
+    description: z.string().optional(),
     team: z.string().optional(),
     titleEn: z.string().optional(),
-    competitionEn: z.string().optional(),
     awardEn: z.string().optional(),
   }),
 });

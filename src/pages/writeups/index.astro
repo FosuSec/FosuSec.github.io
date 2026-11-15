@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { postSlug } from '../../utils/abbrlink';
 
 const posts = (await getCollection('writeups')).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
@@ -26,7 +27,7 @@ function formatDate(d: Date) {
           <p class="empty">暂无内容，敬请期待。</p>
         ) : (
           posts.map((post) => (
-            <a href={`/writeups/${post.id}`} class="card list-item">
+            <a href={`/writeups/${postSlug(post)}`} class="card list-item">
               <div class="list-info">
                 <div class="list-meta">
                   <span class="badge">{post.data.category}</span>
