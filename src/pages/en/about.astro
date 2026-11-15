@@ -6,18 +6,41 @@ import { members } from '../../data/members';
 ---
 
 <BaseLayout title="About" description={`Learn about ${site.nameEn} (${site.shortName}), its research directions and team members.`}>
-  <section class="page-hero">
-    <div class="container">
-      <h1>About Us</h1>
-      <p>Learn about {site.nameEn} ({site.shortName}), its mission, research directions and team.</p>
+  <section class="page-hero dossier-hero">
+    <div class="container dossier-hero-inner">
+      <div class="dossier-hero-main">
+        <p class="dossier-tag">FosuSec / Profile</p>
+        <h1>About Us</h1>
+        <p>Learn about {site.nameEn} ({site.shortName}), its mission, research directions and team.</p>
+      </div>
+      <dl class="dossier-meta">
+        <div class="dossier-meta-row">
+          <dt>ID</dt>
+          <dd>{site.shortName}</dd>
+        </div>
+        <div class="dossier-meta-row">
+          <dt>Founded</dt>
+          <dd>{site.startYear}</dd>
+        </div>
+        <div class="dossier-meta-row">
+          <dt>Status</dt>
+          <dd><span class="status-dot" aria-hidden="true"></span>Active</dd>
+        </div>
+        <div class="dossier-meta-row">
+          <dt>Focus</dt>
+          <dd>CTF / Security</dd>
+        </div>
+      </dl>
     </div>
   </section>
 
   <!-- 实验室简介 -->
   <section class="section">
-    <div class="container">
-      <p class="eyebrow">01 · About</p>
-      <h2 class="section-title">Overview</h2>
+    <div class="container intro-grid">
+      <div>
+        <p class="eyebrow">01 · About</p>
+        <h2 class="section-title">Overview</h2>
+      </div>
       <div class="prose">
         <p>
           {site.fullName} is an academic and competitive team in cyberspace security. We bring together
@@ -30,6 +53,7 @@ import { members } from '../../data/members';
           members with a platform for collaboration, competition opportunities and hands-on projects, while
           sharing technical writeups with the security community.
         </p>
+        <p class="mission-line">Learn · Compete · Research · Share</p>
       </div>
     </div>
   </section>
@@ -40,16 +64,20 @@ import { members } from '../../data/members';
       <p class="eyebrow">02 · Research</p>
       <h2 class="section-title">Research Directions</h2>
       <p class="section-subtitle">We focus on the following core areas.</p>
-      <div class="grid-2">
+      <ol class="roster">
         {
-          researchDirections.map((dir) => (
-            <div class="card">
-              <h3>{dir.titleEn}</h3>
-              <p>{dir.descriptionEn}</p>
-            </div>
+          researchDirections.map((dir, i) => (
+            <li class="roster-item">
+              <span class="roster-index">{String(i + 1).padStart(2, '0')}</span>
+              <div class="roster-body">
+                <h3>{dir.titleEn}</h3>
+                <span class="roster-en">{dir.title}</span>
+                <p>{dir.descriptionEn}</p>
+              </div>
+            </li>
           ))
         }
-      </div>
+      </ol>
     </div>
   </section>
 
@@ -61,9 +89,9 @@ import { members } from '../../data/members';
       <p class="section-subtitle">Sample member list; update in the source as needed.</p>
       <div class="grid-2">
         {
-          members.map((m) => (
+          members.map((m, i) => (
             <div class="card member-card">
-              <div class="avatar">{m.name.slice(0, 1)}</div>
+              <div class="avatar">{m.avatar ? <img src={m.avatar} alt={m.name} /> : m.name.slice(0, 1)}</div>
               <div>
                 <h3>{m.name}</h3>
                 <span class="badge">{m.roleEn}</span>
@@ -85,6 +113,7 @@ import { members } from '../../data/members';
   }
 
   .member-card {
+    position: relative;
     display: flex;
     gap: 1rem;
     align-items: flex-start;
@@ -108,11 +137,190 @@ import { members } from '../../data/members';
     justify-content: center;
     font-weight: 700;
     font-size: 1.2rem;
+    overflow: hidden;
+  }
+
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* ---- 档案式头部 ---- */
+  .dossier-hero {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .dossier-hero-inner {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2.5rem;
+  }
+
+  .dossier-hero-main {
+    max-width: 680px;
+  }
+
+  .dossier-tag {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.9rem;
+  }
+
+  .dossier-meta {
+    flex-shrink: 0;
+    min-width: 280px;
+    margin: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    overflow: hidden;
+  }
+
+  .dossier-meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.65rem 1rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.85rem;
+  }
+
+  .dossier-meta-row:last-child {
+    border-bottom: 0;
+  }
+
+  .dossier-meta-row dt {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .dossier-meta-row dd {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--heading);
+    text-align: right;
+  }
+
+  .status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-right: 6px;
+  }
+
+  /* ---- 简介两栏 ---- */
+  .intro-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .intro-grid .prose {
+    margin: 0;
+    max-width: none;
+  }
+
+  .mission-line {
+    margin: 1.5rem 0 0;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+  }
+
+  /* ---- 方向名册 ---- */
+  .roster {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .roster-item {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 1.5rem;
+    padding: 1.75rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .roster-item:hover {
+    background: var(--surface);
+    box-shadow: inset 3px 0 0 var(--primary);
+  }
+
+  .roster-index {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--primary);
+    padding-top: 0.2rem;
+  }
+
+  .roster-body h3 {
+    margin: 0 0 0.15rem;
+  }
+
+  .roster-en {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .roster-body p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    max-width: 720px;
+  }
+
+  @media (max-width: 900px) {
+    .dossier-hero-inner {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .dossier-meta {
+      min-width: 0;
+    }
+
+    .intro-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
   }
 
   @media (max-width: 760px) {
     .grid-2 {
       grid-template-columns: 1fr;
+    }
+
+    .roster-item {
+      grid-template-columns: 40px 1fr;
+      gap: 1rem;
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
     }
   }
 </style>

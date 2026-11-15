@@ -7,7 +7,7 @@ export const site = {
   nameEn: 'FosuSec Cybersecurity Lab',
   shortName: 'FosuSec',
   fullName: '佛大网络安全实验室（FosuSec）',
-  startYear: '2023',
+  startYear: '2018',
   description:
     '佛大网络安全实验室（FosuSec）致力于网络安全技术研究、CTF 竞赛与安全人才培养。',
   descriptionEn:
