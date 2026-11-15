@@ -6,7 +6,10 @@ import { getCollection } from 'astro:content';
 import { postSlug } from '../../utils/abbrlink';
 
 const latestNews = (await getCollection('news'))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .sort((a, b) => {
+    if (a.data.pinned !== b.data.pinned) return a.data.pinned ? -1 : 1;
+    return b.data.date.valueOf() - a.data.date.valueOf();
+  })
   .slice(0, 3);
 
 const latestWriteups = (await getCollection('writeups'))
@@ -84,6 +87,7 @@ function formatDate(d: Date) {
           latestNews.map((post) => (
             <a href={`/en/news/${postSlug(post)}`} class="card post-card">
               <div class="post-meta">
+                {post.data.pinned && <span class="badge badge-pinned">Pinned</span>}
                 <span class="badge">{post.data.category}</span>
                 <time>{formatDate(post.data.date)}</time>
               </div>
