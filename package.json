@@ -7,7 +7,10 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "new": "node scripts/new-post.mjs",
+    "new:news": "node scripts/new-post.mjs news",
+    "new:writeups": "node scripts/new-post.mjs writeups"
   },
   "dependencies": {
     "astro": "^5.0.0"
