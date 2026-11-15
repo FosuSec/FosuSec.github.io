@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { readdirSync } from 'node:fs';
+import { join } from 'node:path';
 
 const awards = (await getCollection('awards')).sort(
   (a, b) => (b.data.date?.valueOf() ?? 0) - (a.data.date?.valueOf() ?? 0),
@@ -23,6 +25,19 @@ const groups = awards.map((entry, index) => {
 function formatDate(d: Date) {
   return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
 }
+
+// Award photos live in public/awards/ and are scanned automatically at build time
+const awardsImgDir = join(process.cwd(), 'public', 'awards');
+const carouselImages = (() => {
+  try {
+    return readdirSync(awardsImgDir)
+      .filter((name) => /\.(png|jpe?g|webp|gif|avif|svg)$/i.test(name))
+      .sort((a, b) => a.localeCompare(b, 'zh-CN', { numeric: true }))
+      .map((name) => `/awards/${name}`);
+  } catch {
+    return [];
+  }
+})();
 ---
 
 <BaseLayout title="Awards" description="Awards and honors earned by FosuSec in information security competitions.">
@@ -32,6 +47,18 @@ function formatDate(d: Date) {
       <p>Competition achievements and honors of FosuSec.</p>
     </div>
   </section>
+
+  <!-- Award photo carousel (scrolls right to left) -->
+  {carouselImages.length > 0 && (
+    <section class="carousel" aria-label="Award photos">
+      <span class="carousel-frame" aria-hidden="true"></span>
+      <div class="carousel-track">
+        {[...carouselImages, ...carouselImages].map((src) => (
+          <img src={src} alt="" loading="lazy" draggable="false" />
+        ))}
+      </div>
+    </section>
+  )}
 
   <section class="section">
     <div class="container">
@@ -70,6 +97,118 @@ function formatDate(d: Date) {
 </BaseLayout>
 
 <style>
+  .carousel {
+    position: relative;
+    width: 80%;
+    margin: 0 auto;
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-soft);
+    padding: 1.1rem 0;
+  }
+
+  .carousel::before,
+  .carousel::after {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 5rem;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 1.4rem;
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+
+  .carousel::before {
+    left: 0;
+    content: '‹';
+    justify-content: flex-start;
+    padding-left: 0.9rem;
+    background: linear-gradient(to right, var(--bg-soft) 40%, transparent);
+  }
+
+  .carousel::after {
+    right: 0;
+    content: '›';
+    justify-content: flex-end;
+    padding-right: 0.9rem;
+    background: linear-gradient(to left, var(--bg-soft) 40%, transparent);
+  }
+
+  .carousel-frame {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    opacity: 0.35;
+    transition: opacity 0.2s ease;
+    background:
+      linear-gradient(var(--primary), var(--primary)) left 8px top 8px / 14px 1px no-repeat,
+      linear-gradient(var(--primary), var(--primary)) left 8px top 8px / 1px 14px no-repeat,
+      linear-gradient(var(--primary), var(--primary)) right 8px top 8px / 14px 1px no-repeat,
+      linear-gradient(var(--primary), var(--primary)) right 8px top 8px / 1px 14px no-repeat,
+      linear-gradient(var(--primary), var(--primary)) left 8px bottom 8px / 14px 1px no-repeat,
+      linear-gradient(var(--primary), var(--primary)) left 8px bottom 8px / 1px 14px no-repeat,
+      linear-gradient(var(--primary), var(--primary)) right 8px bottom 8px / 14px 1px no-repeat,
+      linear-gradient(var(--primary), var(--primary)) right 8px bottom 8px / 1px 14px no-repeat;
+  }
+
+  .carousel:hover .carousel-frame {
+    opacity: 0.9;
+  }
+
+  .carousel:hover::before,
+  .carousel:hover::after {
+    color: var(--primary);
+  }
+
+  :global(:root[data-theme='dark']) .carousel:hover::before,
+  :global(:root[data-theme='dark']) .carousel:hover::after {
+    text-shadow:
+      1px 0 0 rgba(255, 45, 85, 0.7),
+      -1px 0 0 rgba(0, 210, 255, 0.7);
+  }
+
+  .carousel-track {
+    display: flex;
+    width: max-content;
+    animation: carousel-scroll 60s linear infinite;
+  }
+
+  .carousel-track img {
+    height: 170px;
+    width: auto;
+    max-width: none;
+    margin-right: 1rem;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .carousel:hover .carousel-track {
+    animation-play-state: paused;
+  }
+
+  @keyframes carousel-scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .carousel-track {
+      animation: none;
+    }
+  }
+
   .timeline {
     position: relative;
     padding: 0.5rem 0 0;
