@@ -22,6 +22,10 @@ export const ui = {
     'footer.email': '邮箱',
     'theme.toggle': '切换深色 / 浅色模式',
     'lang.switch': 'EN',
+    'nav.label': '主导航',
+    'nav.open': '打开导航菜单',
+    'nav.close': '关闭导航菜单',
+    'nav.drawer': '导航抽屉',
   },
   en: {
     'site.name': 'FosuSec Cybersecurity Lab',
@@ -39,6 +43,10 @@ export const ui = {
     'footer.email': 'Email',
     'theme.toggle': 'Toggle dark mode',
     'lang.switch': 'CN',
+    'nav.label': 'Primary navigation',
+    'nav.open': 'Open navigation menu',
+    'nav.close': 'Close navigation menu',
+    'nav.drawer': 'Navigation drawer',
   },
 } as const;
 

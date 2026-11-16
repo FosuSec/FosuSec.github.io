@@ -724,6 +724,11 @@ time {
   .hero-status {
     font-size: 0.78rem;
   }
+
+  .typed {
+    white-space: normal;
+    word-break: break-word;
+  }
 }
 
 @keyframes blink {
@@ -896,5 +901,22 @@ body {
 
   .page-hero {
     padding: 2.5rem 0 2rem;
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  @property --drawer-backdrop {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 0;
+  }
+
+  @keyframes fade-drawer-backdrop {
+    0% {
+      --drawer-backdrop: 1;
+    }
+    100% {
+      --drawer-backdrop: 0;
+    }
   }
 }

@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
+import { getWebpDimensions } from '../../utils/imageSize';
 
 const awards = (await getCollection('awards')).sort(
   (a, b) => (b.data.date?.valueOf() ?? 0) - (a.data.date?.valueOf() ?? 0),
@@ -33,7 +34,11 @@ const carouselImages = (() => {
     return readdirSync(awardsImgDir)
       .filter((name) => /\.(png|jpe?g|webp|gif|avif|svg)$/i.test(name))
       .sort((a, b) => a.localeCompare(b, 'zh-CN', { numeric: true }))
-      .map((name) => `/awards/${name}`);
+      .map((name) => {
+        const dims = getWebpDimensions(join(awardsImgDir, name));
+        const width = dims ? Math.round((dims.width / dims.height) * 170) : 226;
+        return { src: `/awards/${name}`, width, height: 170 };
+      });
   } catch {
     return [];
   }
@@ -53,9 +58,17 @@ const carouselImages = (() => {
     <section class="carousel" aria-label="Award photos">
       <span class="carousel-frame" aria-hidden="true"></span>
       <div class="carousel-track">
-        {[...carouselImages, ...carouselImages].map((src) => (
+        {[...carouselImages, ...carouselImages].map((img, idx) => (
           <figure class="film-frame">
-            <img src={src} alt="" loading="lazy" draggable="false" />
+            <img
+              src={img.src}
+              alt=""
+              width={img.width}
+              height={img.height}
+              loading={idx < 8 ? 'eager' : 'lazy'}
+              decoding="async"
+              draggable="false"
+            />
           </figure>
         ))}
       </div>
@@ -209,6 +222,28 @@ const carouselImages = (() => {
     object-fit: cover;
     border: 1px solid var(--border);
     box-shadow: var(--shadow-sm);
+    background: linear-gradient(
+      90deg,
+      var(--surface) 25%,
+      var(--primary-soft) 50%,
+      var(--surface) 75%
+    );
+    background-size: 200% 100%;
+    animation: film-shimmer 1.5s ease-in-out infinite;
+  }
+
+  .film-frame img.is-loaded {
+    animation: none;
+    background: var(--surface);
+  }
+
+  @keyframes film-shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
   }
 
   .carousel:hover .carousel-track {
@@ -448,6 +483,10 @@ const carouselImages = (() => {
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .film-frame img {
+      animation: none;
+    }
+
     .award-item::before {
       transition: none;
     }
@@ -465,3 +504,17 @@ const carouselImages = (() => {
     color: var(--text-muted);
   }
 </style>
+
+<script is:inline>
+  (function () {
+    document.querySelectorAll('.film-frame img').forEach(function (img) {
+      if (img.complete) {
+        img.classList.add('is-loaded');
+      } else {
+        img.addEventListener('load', function () {
+          img.classList.add('is-loaded');
+        }, { once: true });
+      }
+    });
+  })();
+</script>

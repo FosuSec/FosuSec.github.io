@@ -14,7 +14,7 @@ export const site = {
     'FosuSec (Foshan University Cybersecurity Lab) focuses on cybersecurity research, CTF competitions, and talent development.',
   url: 'https://fosusec.github.io',
   github: 'https://github.com/FosuSec',
-  email: 'aurorp1g@gmail.com ',
+  email: 'aurorp1g@gmail.com',
   /** 招新 / 加入入口是否开启 */
   recruitmentOpen: true,
 } as const;

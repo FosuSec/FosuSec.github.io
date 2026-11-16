@@ -29,6 +29,7 @@ const htmlLang = locale === 'en' ? 'en' : 'zh-CN';
     <meta name="description" content={metaDescription} />
     <meta name="generator" content={Astro.generator} />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" href="/logo-mark.png" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={metaDescription} />
     <meta property="og:type" content="website" />
@@ -69,7 +70,7 @@ const htmlLang = locale === 'en' ? 'en' : 'zh-CN';
               io.unobserve(entry.target);
             }
           });
-        }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
+        }, { threshold: 0, rootMargin: '0px 0px 80px 0px' });
         els.forEach(function (el) { io.observe(el); });
       })();
     </script>
