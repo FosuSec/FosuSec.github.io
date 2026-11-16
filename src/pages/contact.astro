@@ -14,16 +14,19 @@ import { site } from '../data/site';
   <section class="section">
     <div class="container grid-3">
       <div class="card">
+        <p class="card-prompt" aria-hidden="true">gh</p>
         <h3>GitHub</h3>
         <p>关注我们的组织，获取开源项目与 Writeups。</p>
         <a href={site.github} target="_blank" rel="noopener noreferrer">访问 GitHub →</a>
       </div>
       <div class="card">
+        <p class="card-prompt" aria-hidden="true">mail</p>
         <h3>邮箱</h3>
         <p>咨询、合作或招新相关事宜，欢迎邮件联系。</p>
         <a href={`mailto:${site.email}`}>{site.email}</a>
       </div>
       <div class="card">
+        <p class="card-prompt" aria-hidden="true">join</p>
         <h3>加入我们</h3>
         <p>想加入实验室？查看招新详情。</p>
         <a href="/join">前往招新页面 →</a>
@@ -42,6 +45,20 @@ import { site } from '../data/site';
   .card p {
     color: var(--text-muted);
     font-size: 0.94rem;
+  }
+
+  .card .card-prompt {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin: 0 0 0.6rem;
+  }
+
+  .card .card-prompt::before {
+    content: '$ ';
+    color: var(--primary);
+    font-weight: 600;
   }
 
   @media (max-width: 760px) {

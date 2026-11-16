@@ -14,16 +14,19 @@ import { site } from '../../data/site';
   <section class="section">
     <div class="container grid-3">
       <div class="card">
+        <p class="card-prompt" aria-hidden="true">gh</p>
         <h3>GitHub</h3>
         <p>Follow our organization for open-source projects and writeups.</p>
         <a href={site.github} target="_blank" rel="noopener noreferrer">Visit GitHub →</a>
       </div>
       <div class="card">
+        <p class="card-prompt" aria-hidden="true">mail</p>
         <h3>Email</h3>
         <p>For inquiries, collaboration or recruitment, reach us by email.</p>
         <a href={`mailto:${site.email}`}>{site.email}</a>
       </div>
       <div class="card">
+        <p class="card-prompt" aria-hidden="true">join</p>
         <h3>Join Us</h3>
         <p>Want to join the lab? Check recruitment details.</p>
         <a href="/en/join">Go to Recruitment →</a>
@@ -42,6 +45,20 @@ import { site } from '../../data/site';
   .card p {
     color: var(--text-muted);
     font-size: 0.94rem;
+  }
+
+  .card .card-prompt {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin: 0 0 0.6rem;
+  }
+
+  .card .card-prompt::before {
+    content: '$ ';
+    color: var(--primary);
+    font-weight: 600;
   }
 
   @media (max-width: 760px) {

@@ -27,8 +27,9 @@ function formatDate(d: Date) {
         posts.length === 0 ? (
           <p class="empty">暂无内容，敬请期待。</p>
         ) : (
-          posts.map((post) => (
+          posts.map((post, i) => (
             <a href={`/news/${postSlug(post)}`} class="card list-item">
+              <span class="list-index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
               <div class="list-info">
                 <div class="list-meta">
                   {post.data.pinned && <span class="badge badge-pinned">置顶</span>}
@@ -56,14 +57,28 @@ function formatDate(d: Date) {
 
   .list-item {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    align-items: flex-start;
     gap: 1rem;
     color: var(--text);
   }
 
   .list-item:hover {
     color: var(--text);
+  }
+
+  .list-index {
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+    padding-top: 0.3rem;
+  }
+
+  .list-info {
+    flex: 1;
+    min-width: 0;
   }
 
   .list-meta {
@@ -92,6 +107,7 @@ function formatDate(d: Date) {
     color: var(--primary);
     font-size: 1.3rem;
     flex-shrink: 0;
+    align-self: center;
   }
 
   .empty {
