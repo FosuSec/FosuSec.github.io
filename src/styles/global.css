@@ -177,7 +177,7 @@ body {
   background: var(--bg);
   line-height: 1.75;
   letter-spacing: 1.2px;
-  font-size: 16px;
+  font-size: 1rem;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -844,4 +844,57 @@ time {
 /* ---------- 跑马灯悬停暂停 ---------- */
 .marquee:hover .marquee-track {
   animation-play-state: paused;
+}
+
+/* ============================================================
+   移动端适配（只做加法，不改动原有 PC 端样式）
+   整站文字缩放：全站字号均为 rem，仅需缩放根字号即可同步缩放
+   正文 / 标题 / 卡片 / 列表 / 徽标等所有文字统一变小
+   ============================================================ */
+
+/* 移动端点击不出现系统灰色高亮（iOS） */
+body {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 平板 / 大屏手机：根字号 16px -> 15px，整站文字按比例缩小 */
+@media (max-width: 640px) {
+  html {
+    font-size: 15px;
+  }
+
+  body {
+    letter-spacing: 0.02em;
+  }
+
+  .container {
+    padding: 0 20px;
+  }
+
+  .section {
+    padding: 3.5rem 0;
+  }
+
+  .page-hero {
+    padding: 3rem 0 2.25rem;
+  }
+}
+
+/* 手机（目标机型约 408px 逻辑宽度）：根字号 16px -> 14px */
+@media (max-width: 480px) {
+  html {
+    font-size: 14px;
+  }
+
+  .container {
+    padding: 0 16px;
+  }
+
+  .section {
+    padding: 3rem 0;
+  }
+
+  .page-hero {
+    padding: 2.5rem 0 2rem;
+  }
 }
