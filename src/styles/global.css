@@ -120,44 +120,9 @@
   background-attachment: fixed;
 }
 
-:root:not([data-theme='dark']) body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    radial-gradient(50% 40% at 12% 0%, rgba(29, 78, 216, 0.1), transparent 70%),
-    radial-gradient(45% 36% at 88% 8%, rgba(8, 145, 178, 0.1), transparent 70%);
-}
-
-/* 渐变标题（蓝→青） */
-:root:not([data-theme='dark']) h1,
-:root:not([data-theme='dark']) h2 {
-  background: linear-gradient(120deg, #1d4ed8, #0891b2);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-}
-
-/* 渐变主按钮 + 光晕 */
-:root:not([data-theme='dark']) .btn-primary {
-  background: linear-gradient(120deg, #1d4ed8, #0891b2);
-  color: #fff;
-  box-shadow: 0 6px 20px rgba(29, 78, 216, 0.22);
-}
-
-:root:not([data-theme='dark']) .btn-primary:hover {
-  background: linear-gradient(120deg, #1e40af, #0e7490);
-  color: #fff;
-  box-shadow: 0 8px 26px rgba(29, 78, 216, 0.3);
-}
-
-/* 卡片悬浮描边 + 柔和光晕 */
+/* 卡片悬浮：仅描边，取消光晕 */
 :root:not([data-theme='dark']) .card:hover {
-  border-color: rgba(29, 78, 216, 0.22);
-  box-shadow: 0 12px 30px rgba(29, 78, 216, 0.12);
+  border-color: rgba(29, 78, 216, 0.28);
 }
 
 * {
@@ -459,12 +424,11 @@ pre code {
   border-radius: var(--radius);
   padding: 1.5rem;
   box-shadow: var(--shadow-sm);
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  transition: box-shadow 0.2s ease;
 }
 
 .card:hover {
   box-shadow: var(--shadow);
-  transform: translateY(-2px);
 }
 
 /* ---------- 研究方向卡片文字排版 ---------- */
