@@ -21,7 +21,7 @@ export const ui = {
     'footer.contact': '联系我们',
     'footer.email': '邮箱',
     'theme.toggle': '切换深色 / 浅色模式',
-    'lang.switch': 'En',
+    'lang.switch': 'EN',
   },
   en: {
     'site.name': 'FosuSec Cybersecurity Lab',
@@ -38,7 +38,7 @@ export const ui = {
     'footer.contact': 'Contact Us',
     'footer.email': 'Email',
     'theme.toggle': 'Toggle dark mode',
-    'lang.switch': '中文',
+    'lang.switch': 'CN',
   },
 } as const;
 
