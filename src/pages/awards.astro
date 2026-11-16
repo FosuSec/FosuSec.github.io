@@ -54,7 +54,9 @@ const carouselImages = (() => {
       <span class="carousel-frame" aria-hidden="true"></span>
       <div class="carousel-track">
         {[...carouselImages, ...carouselImages].map((src) => (
-          <img src={src} alt="" loading="lazy" draggable="false" />
+          <figure class="film-frame">
+            <img src={src} alt="" loading="lazy" draggable="false" />
+          </figure>
         ))}
       </div>
     </section>
@@ -102,10 +104,10 @@ const carouselImages = (() => {
     width: 80%;
     margin: 0 auto;
     overflow: hidden;
+    border-radius: var(--radius);
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
     background: var(--bg-soft);
-    padding: 1.1rem 0;
   }
 
   .carousel::before,
@@ -179,11 +181,30 @@ const carouselImages = (() => {
     animation: carousel-scroll 60s linear infinite;
   }
 
-  .carousel-track img {
+  .film-frame {
+    flex-shrink: 0;
+    margin: 0 1rem 0 0;
+    padding: 14px 0;
+    background:
+      repeating-linear-gradient(
+          to right,
+          var(--text-muted) 0 12px,
+          transparent 12px 28px
+        )
+        center top 2px / 100% 10px no-repeat,
+      repeating-linear-gradient(
+          to right,
+          var(--text-muted) 0 12px,
+          transparent 12px 28px
+        )
+        center bottom 2px / 100% 10px no-repeat;
+  }
+
+  .film-frame img {
+    display: block;
     height: 170px;
     width: auto;
     max-width: none;
-    margin-right: 1rem;
     border-radius: 10px;
     object-fit: cover;
     border: 1px solid var(--border);
