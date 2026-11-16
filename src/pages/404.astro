@@ -5,8 +5,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 <BaseLayout title="页面未找到" description="您访问的页面不存在。">
   <section class="section">
     <div class="container not-found">
-      <h1>404</h1>
-      <p>抱歉，您访问的页面不存在或已被移动。</p>
+      <div class="nf-visual">
+        <span class="nf-reticle" aria-hidden="true"></span>
+        <h1 class="nf-code" data-text="404">404</h1>
+      </div>
+      <p class="eyebrow nf-label">信号丢失 · SIGNAL LOST</p>
+      <p class="nf-desc">抱歉，您访问的页面不存在或已被移动。</p>
       <a href="/" class="btn btn-primary">返回首页</a>
     </div>
   </section>
@@ -16,16 +20,157 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .not-found {
     text-align: center;
     padding: 4rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
-  .not-found h1 {
-    font-size: 4rem;
+  /* 瞄准镜 + 404 的视觉容器 */
+  .nf-visual {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: clamp(15rem, 42vw, 22rem);
+    aspect-ratio: 1;
+    margin-bottom: 1.5rem;
+  }
+
+  /* 十字瞄准镜：外环 + 虚线内环 + 十字线 */
+  .nf-reticle {
+    /* 用文字色/主色与透明混合，浅色、深色模式下都比 --border 更明显 */
+    --nf-ring: var(--border);
+    --nf-ring: color-mix(in srgb, var(--text-muted) 42%, transparent);
+    --nf-cross: var(--border);
+    --nf-cross: color-mix(in srgb, var(--primary) 45%, transparent);
+    position: absolute;
+    inset: 0;
+    border: 1px solid var(--nf-ring);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .nf-reticle::before {
+    content: '';
+    position: absolute;
+    inset: 14%;
+    border: 1px dashed var(--border);
+    border: 1px dashed color-mix(in srgb, var(--text-muted) 30%, transparent);
+    border-radius: 50%;
+    opacity: 0.8;
+  }
+
+  .nf-reticle::after {
+    content: '';
+    position: absolute;
+    inset: -10%;
+    background:
+      linear-gradient(90deg, transparent calc(50% - 0.5px), var(--nf-cross) calc(50% - 0.5px), var(--nf-cross) calc(50% + 0.5px), transparent calc(50% + 0.5px)),
+      linear-gradient(0deg, transparent calc(50% - 0.5px), var(--nf-cross) calc(50% - 0.5px), var(--nf-cross) calc(50% + 0.5px), transparent calc(50% + 0.5px));
+  }
+
+  .nf-code {
+    position: relative;
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: clamp(4rem, 15vw, 7rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.03em;
+    color: var(--heading);
+  }
+
+  /* 周期性 RGB 撕裂：红色/青色偏移层默认隐藏 */
+  .nf-code::before,
+  .nf-code::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .nf-code::before {
     color: var(--primary);
+  }
+
+  .nf-code::after {
+    color: var(--accent);
+  }
+
+  .nf-label {
     margin-bottom: 0.5rem;
   }
 
-  .not-found p {
+  .nf-desc {
     color: var(--text-muted);
     margin-bottom: 1.5rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .nf-reticle {
+      animation: nf-spin 40s linear infinite;
+    }
+
+    .nf-code::before {
+      animation: nf-glitch 4s steps(1, end) infinite;
+    }
+
+    .nf-code::after {
+      animation: nf-glitch 4s steps(1, end) 0.35s infinite;
+    }
+  }
+
+  @keyframes nf-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes nf-glitch {
+    0%, 84%, 100% {
+      opacity: 0;
+      transform: none;
+      clip-path: inset(0 0 0 0);
+    }
+    86% {
+      opacity: 0.85;
+      transform: translate(-5px, -2px);
+      clip-path: inset(8% 0 56% 0);
+    }
+    88% {
+      opacity: 0.85;
+      transform: translate(5px, 2px);
+      clip-path: inset(56% 0 8% 0);
+    }
+    90% {
+      opacity: 0.85;
+      transform: translate(-3px, 1px);
+      clip-path: inset(28% 0 42% 0);
+    }
+    92% {
+      opacity: 0.85;
+      transform: translate(3px, -1px);
+      clip-path: inset(68% 0 6% 0);
+    }
+    94% {
+      opacity: 0;
+      transform: none;
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  /* 移动端：缩小瞄准镜并收紧十字线，避免横向溢出 */
+  @media (max-width: 640px) {
+    .nf-visual {
+      width: min(14rem, 70vw);
+    }
+
+    .nf-reticle::after {
+      inset: -8%;
+    }
+
+    .not-found {
+      padding: 2.5rem 0 3rem;
+    }
   }
 </style>
