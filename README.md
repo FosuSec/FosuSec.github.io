@@ -1,7 +1,7 @@
 # FosuSec · 佛大网络安全实验室
 
 <p align="center">
-  <img src="public/logo.png" width="96" alt="FosuSec Logo" />
+  <img src="public/logo.png" width="250" alt="FosuSec Logo" />
 </p>
 
 ### 📝 简介 | About
