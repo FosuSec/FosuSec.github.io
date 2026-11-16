@@ -500,7 +500,15 @@ function isActive(path: string) {
     background: var(--primary-soft);
     color: var(--primary);
     font-weight: 600;
-    box-shadow: inset 3px 0 0 var(--accent);
+  }
+
+  .Drawer-link[aria-current='page']::after {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
   }
 
   .Drawer-foot {
